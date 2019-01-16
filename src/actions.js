@@ -79,23 +79,23 @@ export const setPagesQuantity = quantity => {
   };
 };
 
-export const changeWidths = width => {
-  return {
-    type: 'CHANGE_WIDTHS',
-    width: width
-  };
-};
+// export const changeWidths = width => {
+//   return {
+//     type: 'CHANGE_WIDTHS',
+//     width: width
+//   };
+// };
 
-export const changeOrder = order => {
-  return {
-    type: 'CHANGE_ORDER',
-    order: order
-  };
-};
+// export const changeOrder = order => {
+//   return {
+//     type: 'CHANGE_ORDER',
+//     order: order
+//   };
+// };
 
-export const changeSorting = sorting => {
-  return {
-    type: 'CHANGE_SORTING',
-    sorting: sorting
-  };
-};
+// export const changeSorting = sorting => {
+//   return {
+//     type: 'CHANGE_SORTING',
+//     sorting: sorting
+//   };
+// };

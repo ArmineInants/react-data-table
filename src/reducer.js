@@ -52,28 +52,28 @@ const initState = {
     { id: 6, type: 'OTHER' }
   ],
   columns: [],
-  columnWidths: [
-    { columnName: 'code', width: 200 },
-    { columnName: 'web', width: 120 },
-    { columnName: 'user', width: 150 },
-    { columnName: 'dep-num', width: 100 },
-    { columnName: 'time', width: 150 },
-    { columnName: 'type', width: 120 },
-    { columnName: 'amount', width: 120 },
-    { columnName: 'currency', width: 120 },
-    { columnName: 'status', width: 120 }
-  ],
-  columnOrder: [
-    'code',
-    'web',
-    'user',
-    'dep-num',
-    'time',
-    'type',
-    'amount',
-    'currency',
-    'status'
-  ],
+  // columnWidths: [
+  //   { columnName: 'code', width: 200 },
+  //   { columnName: 'web', width: 120 },
+  //   { columnName: 'user', width: 150 },
+  //   { columnName: 'dep-num', width: 100 },
+  //   { columnName: 'time', width: 150 },
+  //   { columnName: 'type', width: 120 },
+  //   { columnName: 'amount', width: 120 },
+  //   { columnName: 'currency', width: 120 },
+  //   { columnName: 'status', width: 120 }
+  // ],
+  // columnOrder: [
+  //   'code',
+  //   'web',
+  //   'user',
+  //   'dep-num',
+  //   'time',
+  //   'type',
+  //   'amount',
+  //   'currency',
+  //   'status'
+  // ],
   perPage: 5,
   currentPage: 1,
   filters: {},
@@ -136,12 +136,12 @@ const reducer = (state = initState, action) => {
       return produceRes({ filters: {} });
     case 'SET_PAGES_QUANTITY':
       return produceRes({ quantity: action.quantity });
-    case 'CHANGE_WIDTHS':
-      return produceRes({ columnWidths: action.width || state.columnWidths });
-    case 'CHANGE_ORDER':
-      return produceRes({ columnOrder: action.order || state.columnOrder });
-    case 'CHANGE_SORTING':
-      return produceRes({ sorting: action.sorting || state.sorting });
+    // case 'CHANGE_WIDTHS':
+    //   return produceRes({ columnWidths: action.width || state.columnWidths });
+    // case 'CHANGE_ORDER':
+    //   return produceRes({ columnOrder: action.order || state.columnOrder });
+    // case 'CHANGE_SORTING':
+    //   return produceRes({ sorting: action.sorting || state.sorting });
     default:
       return state;
   }

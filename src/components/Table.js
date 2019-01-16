@@ -17,40 +17,40 @@ import {
 } from '../actions.js';
 import axios from 'axios';
 import io from 'socket.io-client';
-// import Pagination from './Pagination';
-import Paper from '@material-ui/core/Paper';
-import {
-  SortingState,
-  IntegratedSorting,
-  PagingState,
-  IntegratedPaging
-} from '@devexpress/dx-react-grid';
-import {
-  Grid,
-  DragDropProvider,
-  Table,
-  TableHeaderRow,
-  TableColumnResizing,
-  TableColumnReordering,
-  PagingPanel
-} from '@devexpress/dx-react-grid-material-ui';
-import { stat } from 'fs';
+import Pagination from './Pagination';
+// import Paper from '@material-ui/core/Paper';
+// import {
+//   SortingState,
+//   IntegratedSorting,
+//   PagingState,
+//   IntegratedPaging
+// } from '@devexpress/dx-react-grid';
+// import {
+//   Grid,
+//   DragDropProvider,
+//   Table,
+//   TableHeaderRow,
+//   TableColumnResizing,
+//   TableColumnReordering,
+//   PagingPanel
+// } from '@devexpress/dx-react-grid-material-ui';
+// import { stat } from 'fs';
 
 class TableMy extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // columns: [
-      //   { id: 'code', name: 'code', title: 'Transaction Code' },
-      //   { id: 'web', name: 'web', title: 'Partner Website' },
-      //   { id: 'user', name: 'user', title: 'Customer Username' },
-      //   { id: 'dep-num', name: 'dep-num', title: 'Deposit Number' },
-      //   { id: 'time', name: 'time', title: 'Placement Time' },
-      //   { id: 'type', name: 'type', title: 'Deposit Type' },
-      //   { id: 'amount', name: 'amount', title: 'Deposit Amount' },
-      //   { id: 'currency', name: 'currency', title: 'Transaction Currency' },
-      //   { id: 'status', name: 'status', title: 'Deposit Status' }
-      // ],
+      columns: [
+        { id: 'code', name: 'code', title: 'Transaction Code' },
+        { id: 'web', name: 'web', title: 'Partner Website' },
+        { id: 'user', name: 'user', title: 'Customer Username' },
+        { id: 'dep-num', name: 'dep-num', title: 'Deposit Number' },
+        { id: 'time', name: 'time', title: 'Placement Time' },
+        { id: 'type', name: 'type', title: 'Deposit Type' },
+        { id: 'amount', name: 'amount', title: 'Deposit Amount' },
+        { id: 'currency', name: 'currency', title: 'Transaction Currency' },
+        { id: 'status', name: 'status', title: 'Deposit Status' }
+      ],
       // columnWidths: [
       //   { columnName: 'code', width: 200 },
       //   { columnName: 'web', width: 120 },
@@ -75,92 +75,92 @@ class TableMy extends Component {
       // ],
       tableColumnExtensions: [{ columnName: 'code', width: 200 }],
       // sorting: [{ columnName: 'code', direction: 'asc' }],
-      currentPage: 1,
-      pageSize: 20,
-      pageSizes: [10, 20, 50, 100, 500, 1000]
+      // currentPage: 1,
+      // pageSize: 20,
+      // pageSizes: [10, 20, 50, 100, 500, 1000]
     };
-    this.changeColumnWidths = columnWidths => {
-      this.props.changeWidths(columnWidths);
-      // this.setState({ columnWidths });
-      axios
-        .post(
-          'https://api.bmakers.site/v1/personal/table',
-          [
-            {
-              type_id: 3,
-              settings: {
-                columnWidths: columnWidths,
-                columnOrder: this.props.columnOrder,
-                sorting: this.props.sorting
-              }
-            }
-          ],
-          {
-            headers: {
-              Authorization: this.props.token
-            }
-          }
-        )
-        .then(res => {})
-        .catch(err => {
-          console.log(err);
-        });
-    };
-    this.changeColumnOrder = newOrder => {
-      // this.setState({ columnOrder: newOrder });
-      this.props.changeOrder(newOrder);
-      axios
-        .post(
-          'https://api.bmakers.site/v1/personal/table',
-          [
-            {
-              type_id: 3,
-              settings: {
-                columnWidths: this.props.columnWidths,
-                columnOrder: newOrder,
-                sorting: this.props.sorting
-              }
-            }
-          ],
-          {
-            headers: {
-              Authorization: this.props.token
-            }
-          }
-        )
-        .then(res => {})
-        .catch(err => {
-          console.log(err);
-        });
-    };
-    this.changeSorting = sorting => {
-      this.props.changeSorting(sorting);
-      axios
-        .post(
-          'https://api.bmakers.site/v1/personal/table',
-          [
-            {
-              type_id: 3,
-              settings: {
-                columnWidths: this.props.columnWidths,
-                columnOrder: this.props.columnOrder,
-                sorting: sorting
-              }
-            }
-          ],
-          {
-            headers: {
-              Authorization: this.props.token
-            }
-          }
-        )
-        .then(res => {})
-        .catch(err => {
-          console.log(err);
-        });
-    };
-    this.changeCurrentPage = currentPage => this.setState({ currentPage });
-    this.changePageSize = pageSize => this.setState({ pageSize });
+    // this.changeColumnWidths = columnWidths => {
+    //   this.props.changeWidths(columnWidths);
+    //   // this.setState({ columnWidths });
+    //   axios
+    //     .post(
+    //       'https://api.bmakers.site/v1/personal/table',
+    //       [
+    //         {
+    //           type_id: 3,
+    //           settings: {
+    //             columnWidths: columnWidths,
+    //             columnOrder: this.props.columnOrder,
+    //             sorting: this.props.sorting
+    //           }
+    //         }
+    //       ],
+    //       {
+    //         headers: {
+    //           Authorization: this.props.token
+    //         }
+    //       }
+    //     )
+    //     .then(res => {})
+    //     .catch(err => {
+    //       console.log(err);
+    //     });
+    // };
+    // this.changeColumnOrder = newOrder => {
+    //   // this.setState({ columnOrder: newOrder });
+    //   this.props.changeOrder(newOrder);
+    //   axios
+    //     .post(
+    //       'https://api.bmakers.site/v1/personal/table',
+    //       [
+    //         {
+    //           type_id: 3,
+    //           settings: {
+    //             columnWidths: this.props.columnWidths,
+    //             columnOrder: newOrder,
+    //             sorting: this.props.sorting
+    //           }
+    //         }
+    //       ],
+    //       {
+    //         headers: {
+    //           Authorization: this.props.token
+    //         }
+    //       }
+    //     )
+    //     .then(res => {})
+    //     .catch(err => {
+    //       console.log(err);
+    //     });
+    // };
+    // this.changeSorting = sorting => {
+    //   this.props.changeSorting(sorting);
+    //   axios
+    //     .post(
+    //       'https://api.bmakers.site/v1/personal/table',
+    //       [
+    //         {
+    //           type_id: 3,
+    //           settings: {
+    //             columnWidths: this.props.columnWidths,
+    //             columnOrder: this.props.columnOrder,
+    //             sorting: sorting
+    //           }
+    //         }
+    //       ],
+    //       {
+    //         headers: {
+    //           Authorization: this.props.token
+    //         }
+    //       }
+    //     )
+    //     .then(res => {})
+    //     .catch(err => {
+    //       console.log(err);
+    //     });
+    // };
+  //   this.changeCurrentPage = currentPage => this.setState({ currentPage });
+  //   this.changePageSize = pageSize => this.setState({ pageSize });
   }
   componentWillMount() {
     this.props.fetchDeposits();
@@ -169,48 +169,48 @@ class TableMy extends Component {
   componentWillUpdate() {
     const search = this.props.history.location.search;
 
-    // if (search) {
-    //   const per_page = /per_page=(.*)\&/.exec(search)
-    //     ? /per_page=(.*)\&/.exec(search)[1]
-    //     : this.props.perPage;
-    //   const current_page = /current_page=(.*)\&/.exec(search)
-    //     ? /current_page=(.*)\&/.exec(search)[1]
-    //     : /current_page=(.*)/.exec(search)
-    //     ? /current_page=(.*)/.exec(search)[1]
-    //     : this.props.currentPage;
-    //   if (per_page !== this.props.perPage) {
-    //     this.props.setPerPage(parseFloat(per_page));
-    //   }
-    //   if (current_page !== this.props.currentPage) {
-    //     this.props.setPage(parseFloat(current_page));
-    //   }
-    // }
+    if (search) {
+      const per_page = /per_page=(.*)\&/.exec(search)
+        ? /per_page=(.*)\&/.exec(search)[1]
+        : this.props.perPage;
+      const current_page = /current_page=(.*)\&/.exec(search)
+        ? /current_page=(.*)\&/.exec(search)[1]
+        : /current_page=(.*)/.exec(search)
+        ? /current_page=(.*)/.exec(search)[1]
+        : this.props.currentPage;
+      if (per_page !== this.props.perPage) {
+        this.props.setPerPage(parseFloat(per_page));
+      }
+      if (current_page !== this.props.currentPage) {
+        this.props.setPage(parseFloat(current_page));
+      }
+    }
   }
   componentDidUpdate() {
-    if (
-      this.props.count &&
-      this.props.total &&
-      !document.getElementById('summary') &&
-      document.getElementsByClassName('Pager-pager-111')[0]
-    ) {
-      document
-        .getElementsByClassName('Pager-pager-111')[0]
-        .insertAdjacentHTML(
-          'beforebegin',
-          '<div id="summary" class="summary-line grey lighten-3"><div class="bold">Summary</div><div>Deposit Count</div><div class="bold">' +
-            this.props.total.deposit_count +
-            '</div><div>Deposit Amount</div><div class="bold">' +
-            this.props.total.deposit_amount +
-            '</div><div>Bonus Amount</div><div class="bold">' +
-            this.props.total.deposit_bonus_amount +
-            '</div><div>Deposit Total Amount</div><div class="bold">' +
-            this.props.total.deposit_total_amount +
-            '</div></div>'
-        );
-    }
-    // let filtered = this.getFiltered();
-    // let quantity = Math.ceil(filtered.length / this.props.perPage);
-    // this.props.setPagesQuantity(quantity);
+    // if (
+    //   this.props.count &&
+    //   this.props.total &&
+    //   !document.getElementById('summary') &&
+    //   document.getElementsByClassName('Pager-pager-111')[0]
+    // ) {
+    //   document
+    //     .getElementsByClassName('Pager-pager-111')[0]
+    //     .insertAdjacentHTML(
+    //       'beforebegin',
+    //       '<div id="summary" class="summary-line grey lighten-3"><div class="bold">Summary</div><div>Deposit Count</div><div class="bold">' +
+    //         this.props.total.deposit_count +
+    //         '</div><div>Deposit Amount</div><div class="bold">' +
+    //         this.props.total.deposit_amount +
+    //         '</div><div>Bonus Amount</div><div class="bold">' +
+    //         this.props.total.deposit_bonus_amount +
+    //         '</div><div>Deposit Total Amount</div><div class="bold">' +
+    //         this.props.total.deposit_total_amount +
+    //         '</div></div>'
+    //     );
+    // }
+    let filtered = this.getFiltered();
+    let quantity = Math.ceil(filtered.length / this.props.perPage);
+    this.props.setPagesQuantity(quantity);
   }
 
   getTransactionStatus = id => {
@@ -310,53 +310,54 @@ class TableMy extends Component {
     return filtered;
   };
 
-  // dragStart = event => {
-  //   if (event.target.id) {
-  //     event.dataTransfer.setData('text', event.target.id);
-  //   }
-  // };
+  dragStart = event => {
+    if (event.target.id) {
+      event.dataTransfer.setData('text', event.target.id);
+    }
+  };
 
-  // drop = event => {
-  //   var bb = event.target.getBoundingClientRect();
-  //   if (event.target.id) {
-  //     if (event.target.id === event.dataTransfer.getData('text')) return;
-  //     const column = columns.filter(col => {
-  //       return col.id === event.dataTransfer.getData('text');
-  //     });
-  //     let columns = columns.filter(col => {
-  //       return col.id !== event.dataTransfer.getData('text');
-  //     });
-  //     let columnsNew = [];
-  //     for (let i = 0, j = columns.length; i < j; i++) {
-  //       if (columns[i].id === event.target.id) {
-  //         if (event.clientX >= bb.x + parseFloat(bb.width) / 2) {
-  //           columnsNew.push(columns[i]);
-  //           columnsNew.push(column[0]);
-  //         } else {
-  //           columnsNew.push(column[0]);
-  //           columnsNew.push(columns[i]);
-  //         }
-  //       } else {
-  //         columnsNew.push(columns[i]);
-  //       }
-  //     }
-  //     this.setState({ columns: columnsNew });
-  //     event.dataTransfer.clearData();
-  //   }
-  // };
+  drop = event => {
+    var bb = event.target.getBoundingClientRect();
+    if (event.target.id) {
+      if (event.target.id === event.dataTransfer.getData('text')) return;
+      // console.log(this.props.columns);
+      const column = this.state.columns.filter(col => {
+        return col.id === event.dataTransfer.getData('text');
+      });
+      let columns = this.state.columns.filter(col => {
+        return col.id !== event.dataTransfer.getData('text');
+      });
+      let columnsNew = [];
+      for (let i = 0, j = columns.length; i < j; i++) {
+        if (columns[i].id === event.target.id) {
+          if (event.clientX >= bb.x + parseFloat(bb.width) / 2) {
+            columnsNew.push(columns[i]);
+            columnsNew.push(column[0]);
+          } else {
+            columnsNew.push(column[0]);
+            columnsNew.push(columns[i]);
+          }
+        } else {
+          columnsNew.push(columns[i]);
+        }
+      }
+      this.setState({ columns: columnsNew });
+      event.dataTransfer.clearData();
+    }
+  };
 
   render() {
-    // let perPage = this.props.perPage;
-    // let currentPage = this.props.currentPage;
-    const columns = this.props.columns;
+    let perPage = this.props.perPage;
+    let currentPage = this.props.currentPage;
+    const columns = this.state.columns;
     const columnWidths = this.props.columnWidths;
     const columnOrder = this.props.columnOrder;
     const sorting = this.props.sorting;
     let filtered = this.getFiltered();
-    // filtered = filtered.slice(
-    //   (currentPage - 1) * perPage,
-    //   perPage * currentPage
-    // );
+    filtered = filtered.slice(
+      (currentPage - 1) * perPage,
+      perPage * currentPage
+    );
     const { socket, connected } = this.props;
     let ids = filtered.map(deposit => {
       return deposit.id;
@@ -369,21 +370,21 @@ class TableMy extends Component {
       });
     }
 
-    // const columnsList = columns.map(col => {
-    //   return (
-    //     <th
-    //       key={col.id}
-    //       id={col.id}
-    //       draggable="true"
-    //       onDrop={this.drop}
-    //       onDragStart={this.dragStart}
-    //       onDragOver={event => event.preventDefault()}
-    //       onDragEnd={this.dragEnd}
-    //     >
-    //       {col.title}
-    //     </th>
-    //   );
-    // });
+    const columnsList = columns.map(col => {
+      return (
+        <th
+          key={col.id}
+          id={col.id}
+          draggable="true"
+          onDrop={this.drop}
+          onDragStart={this.dragStart}
+          onDragOver={event => event.preventDefault()}
+          onDragEnd={this.dragEnd}
+        >
+          {col.title}
+        </th>
+      );
+    });
 
     const getColumn = (deposit, index) => {
       // const span = (
@@ -430,27 +431,27 @@ class TableMy extends Component {
       };
     });
 
-    // const depositList = filtered.length
-    //   ? filtered.map(deposit => {
-    //       return (
-    //         <tr key={deposit.id}>
-    //           <td>{getColumn(deposit, 0)}</td>
-    //           <td>{getColumn(deposit, 1)}</td>
-    //           <td>{getColumn(deposit, 2)}</td>
-    //           <td>{getColumn(deposit, 3)}</td>
-    //           <td>{getColumn(deposit, 4)}</td>
-    //           <td>{getColumn(deposit, 5)}</td>
-    //           <td>{getColumn(deposit, 6)}</td>
-    //           <td>{getColumn(deposit, 7)}</td>
-    //           <td>{getColumn(deposit, 8)}</td>
-    //         </tr>
-    //       );
-    //     })
-    //   : null;
+    const depositList = filtered.length
+      ? filtered.map(deposit => {
+          return (
+            <tr key={deposit.id}>
+              <td>{getColumn(deposit, 0)}</td>
+              <td>{getColumn(deposit, 1)}</td>
+              <td>{getColumn(deposit, 2)}</td>
+              <td>{getColumn(deposit, 3)}</td>
+              <td>{getColumn(deposit, 4)}</td>
+              <td>{getColumn(deposit, 5)}</td>
+              <td>{getColumn(deposit, 6)}</td>
+              <td>{getColumn(deposit, 7)}</td>
+              <td>{getColumn(deposit, 8)}</td>
+            </tr>
+          );
+        })
+      : null;
 
     return this.props.columns.length ? (
       <div className="table">
-        <Paper>
+        {/* <Paper>
           <Grid rows={depositRows} columns={columns}>
             <PagingState
               currentPage={this.state.currentPage}
@@ -477,15 +478,15 @@ class TableMy extends Component {
             <TableHeaderRow showSortingControls />
             <PagingPanel pageSizes={this.state.pageSizes} />
           </Grid>
-        </Paper>
-        {/* <table className="highlight">
+        </Paper> */}
+        <table className="highlight">
           <thead className="grey lighten-3">
             <tr>{columnsList}</tr>
           </thead>
 
           <tbody>{depositList}</tbody>
-        </table> */}
-        {/* <div className="summary-line grey lighten-3">
+        </table>
+        <div className="summary-line grey lighten-3">
           <div className="bold">Summary</div>
           <div>Deposit Count</div>
           <div className="bold">{this.props.total.deposit_count}</div>
@@ -495,8 +496,8 @@ class TableMy extends Component {
           <div className="bold">{this.props.total.deposit_bonus_amount}</div>
           <div>Deposit Total Amount</div>
           <div className="bold">{this.props.total.deposit_total_amount}</div>
-        </div> */}
-        {/* <Pagination search={this.props.history.location.search} /> */}
+        </div>
+        <Pagination search={this.props.history.location.search} />
       </div>
     ) : (
       <div className="center">
@@ -533,9 +534,9 @@ const mapStateToProps = state => {
     depositTypes: state.depositTypes,
     total: state.total,
     count: state.count,
-    columnWidths: state.columnWidths,
-    columnOrder: state.columnOrder,
-    sorting: state.sorting,
+    // columnWidths: state.columnWidths,
+    // columnOrder: state.columnOrder,
+    // sorting: state.sorting,
     columns: state.columns
   };
 };
@@ -569,9 +570,9 @@ const mapDispatchToProps = dispatch => {
                 settings && settings.columnOrder ? settings.columnOrder : null;
               const sorting =
                 settings && settings.sorting ? settings.sorting : null;
-              dispatch(changeOrder(columnOrder));
-              dispatch(changeWidths(columnWidths));
-              dispatch(changeSorting(sorting));
+              // dispatch(changeOrder(columnOrder));
+              // dispatch(changeWidths(columnWidths));
+              // dispatch(changeSorting(sorting));
 
               axios
                 .get('https://api.bmakers.site/v1/riskGroup?lang_id=1', {
@@ -613,7 +614,7 @@ const mapDispatchToProps = dispatch => {
                           const count = res.headers['x-total-count'];
 
                           const data = res.data.data.data;
-                          console.log('data', res.data.data.data);
+                          // console.log('data', res.data.data.data);
 
                           let connected = false;
                           const socketUrl = 'wss://wsapi.bmakers.site';
@@ -682,27 +683,27 @@ const mapDispatchToProps = dispatch => {
           console.log(err);
         });
     },
-    // setPage: page => {
-    //   dispatch(setPage(page));
-    // },
-    // setPerPage: num => {
-    //   dispatch(setPerPage(num));
-    // },
+    setPage: page => {
+      dispatch(setPage(page));
+    },
+    setPerPage: num => {
+      dispatch(setPerPage(num));
+    },
     setFilters: filter => {
       dispatch(setFilters(filter));
     },
-    changeWidths: widths => {
-      dispatch(changeWidths(widths));
-    },
-    changeOrder: order => {
-      dispatch(changeOrder(order));
-    },
-    changeSorting: sorting => {
-      dispatch(changeSorting(sorting));
+    // changeWidths: widths => {
+    //   dispatch(changeWidths(widths));
+    // },
+    // changeOrder: order => {
+    //   dispatch(changeOrder(order));
+    // },
+    // changeSorting: sorting => {
+    //   dispatch(changeSorting(sorting));
+    // },
+    setPagesQuantity: quantity => {
+      dispatch(setPagesQuantity(quantity));
     }
-    // setPagesQuantity: quantity => {
-    //   dispatch(setPagesQuantity(quantity));
-    // }
   };
 };
 
