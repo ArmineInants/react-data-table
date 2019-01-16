@@ -443,9 +443,7 @@ class Filters extends Component {
         <div className="btn-wrapper">
           <Link
             to={{
-              pathname: '/deposits',
-              query: {},
-              search: 'per_page=' + this.props.perPage + '&current_page=1'
+              pathname: '/'
             }}
             className="btn white black-text reset-btn"
             onClick={this.handleReset}
@@ -454,13 +452,9 @@ class Filters extends Component {
           </Link>
           <Link
             to={{
-              pathname: this.state.search ? '/deposits/filters' : '/deposits',
+              pathname: this.state.search ? '/deposits/filters' : '/',
               query: this.state.filters,
-              search:
-                this.state.search +
-                'per_page=' +
-                this.props.perPage +
-                '&current_page=1'
+              search: this.state.search.slice(0, -1)
             }}
             className="btn blue search-btn"
             onClick={this.handleSearch}

@@ -8,7 +8,9 @@ export const fetchDeposits = (
   connected,
   deposits,
   websites,
-  groups
+  groups,
+  total,
+  count
 ) => {
   return {
     type: 'FETCH_DEPOSITS',
@@ -17,7 +19,9 @@ export const fetchDeposits = (
     socket: socket,
     connected: connected,
     websites: websites,
-    groups: groups
+    groups: groups,
+    total: total,
+    count: count
   };
 };
 
@@ -72,5 +76,26 @@ export const setPagesQuantity = quantity => {
   return {
     type: 'SET_PAGES_QUANTITY',
     quantity: quantity
+  };
+};
+
+export const changeWidths = width => {
+  return {
+    type: 'CHANGE_WIDTHS',
+    width: width
+  };
+};
+
+export const changeOrder = order => {
+  return {
+    type: 'CHANGE_ORDER',
+    order: order
+  };
+};
+
+export const changeSorting = sorting => {
+  return {
+    type: 'CHANGE_SORTING',
+    sorting: sorting
   };
 };

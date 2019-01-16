@@ -57,8 +57,13 @@ code {
   top: -5px;
   font-size: 0.8em;
 }
+/* .table th:hover {
+  border-right: 1px solid blue;
+  resize: horizontal;
+} */
 
 .summary-line {
+  padding: 20px;
   height: 50px;
   display: flex;
   flex-direction: row;
@@ -72,4 +77,13 @@ code {
 
 .summary-line .bold {
   font-weight: bold;
+}
+
+thead {
+  background-color: #eee;
+}
+
+thead th {
+  border-radius: 0;
+  border-collapse: collapse;
 }

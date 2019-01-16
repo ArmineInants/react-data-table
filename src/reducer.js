@@ -51,6 +51,29 @@ const initState = {
     { id: 5, type: 'MANUAL_ADJUSTMENT' },
     { id: 6, type: 'OTHER' }
   ],
+  columns: [],
+  columnWidths: [
+    { columnName: 'code', width: 200 },
+    { columnName: 'web', width: 120 },
+    { columnName: 'user', width: 150 },
+    { columnName: 'dep-num', width: 100 },
+    { columnName: 'time', width: 150 },
+    { columnName: 'type', width: 120 },
+    { columnName: 'amount', width: 120 },
+    { columnName: 'currency', width: 120 },
+    { columnName: 'status', width: 120 }
+  ],
+  columnOrder: [
+    'code',
+    'web',
+    'user',
+    'dep-num',
+    'time',
+    'type',
+    'amount',
+    'currency',
+    'status'
+  ],
   perPage: 5,
   currentPage: 1,
   filters: {},
@@ -60,7 +83,10 @@ const initState = {
   connected: false,
   websites: [],
   currencies: [],
-  userGroups: []
+  userGroups: [],
+  total: {},
+  count: null,
+  sorting: [{ columnName: 'code', direction: 'asc' }]
 };
 
 const reducer = (state = initState, action) => {
@@ -68,13 +94,27 @@ const reducer = (state = initState, action) => {
 
   switch (action.type) {
     case 'FETCH_DEPOSITS':
+      const columns = [
+        { id: 'code', name: 'code', title: 'Transaction Code' },
+        { id: 'web', name: 'web', title: 'Partner Website' },
+        { id: 'user', name: 'user', title: 'Customer Username' },
+        { id: 'dep-num', name: 'dep-num', title: 'Deposit Number' },
+        { id: 'time', name: 'time', title: 'Placement Time' },
+        { id: 'type', name: 'type', title: 'Deposit Type' },
+        { id: 'amount', name: 'amount', title: 'Deposit Amount' },
+        { id: 'currency', name: 'currency', title: 'Transaction Currency' },
+        { id: 'status', name: 'status', title: 'Deposit Status' }
+      ];
       return produceRes({
         deposits: action.deposits,
         token: action.token,
         socket: action.socket,
         connected: action.connected,
         websites: action.websites,
-        userGroups: action.groups
+        userGroups: action.groups,
+        total: action.total,
+        count: action.count,
+        columns: columns
       });
     case 'FETCH_CURRENCIES':
       return produceRes({
@@ -96,6 +136,12 @@ const reducer = (state = initState, action) => {
       return produceRes({ filters: {} });
     case 'SET_PAGES_QUANTITY':
       return produceRes({ quantity: action.quantity });
+    case 'CHANGE_WIDTHS':
+      return produceRes({ columnWidths: action.width || state.columnWidths });
+    case 'CHANGE_ORDER':
+      return produceRes({ columnOrder: action.order || state.columnOrder });
+    case 'CHANGE_SORTING':
+      return produceRes({ sorting: action.sorting || state.sorting });
     default:
       return state;
   }

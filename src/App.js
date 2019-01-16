@@ -4,7 +4,7 @@
 
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Table from './components/Table';
+import TableMy from './components/Table';
 import Filters from './components/Filters';
 
 const App = props => (
@@ -12,8 +12,8 @@ const App = props => (
     <div className="App">
       <Filters />
       <Switch>
-        <Route exact path="/" component={Table} />
-        <Route path="/:query" component={Table} />
+        <Route exact path="/" component={TableMy} />
+        <Route path="/:query" component={TableMy} />
       </Switch>
     </div>
   </BrowserRouter>
