@@ -1,40 +1,65 @@
 {
-  "name": "deposit-table",
+  "name": "react-column-drag-resize-table",
   "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@devexpress/dx-react-core": "^1.9.1",
-    "@devexpress/dx-react-grid": "^1.9.1",
-    "@devexpress/dx-react-grid-material-ui": "^1.9.1",
-    "@material-ui/core": "^3.7.0",
-    "@material-ui/icons": "^3.0.1",
-    "axios": "^0.18.0",
-    "materialize-css": "^1.0.0-rc.2",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "react-redux": "^5.1.1",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.1",
-    "redux": "^4.0.1",
-    "socket.io": "^2.2.0"
+  "description": "React data table with draggable column reorder and resize, optional filters and pagination, themeable CSS variables, optional localStorage layout.",
+  "author": "Armine Inants",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/react-column-drag-resize-table.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "keywords": [
+    "react",
+    "table",
+    "data-table",
+    "data-grid",
+    "datagrid",
+    "columns",
+    "resize",
+    "reorder",
+    "drag",
+    "admin",
+    "dashboard",
+    "pagination",
+    "filter"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArmineInants/react-data-table.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ArmineInants/react-data-table/issues"
+  },
+  "homepage": "https://github.com/ArmineInants/react-data-table#readme",
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite --config vite.demo.config.js",
+    "build": "vite build && npm run copy:types",
+    "copy:types": "node -e \"require('fs').copyFileSync('src/index.d.ts','dist/index.d.ts')\"",
+    "prepublishOnly": "npm run build",
+    "preview": "vite preview --config vite.demo.config.js"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
   "devDependencies": {
-    "concurrently": "^4.1.0",
-    "nodemon": "^1.18.7"
+    "@vitejs/plugin-react": "^4.3.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^5.4.11"
   }
 }
