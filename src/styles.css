@@ -1,0 +1,452 @@
+/*
+  react-column-drag-resize-table — theme overrides on :root or on any ancestor of .react-data-table, e.g.:
+  :root { --rdt-accent: #1565c0; }
+  .dark { --rdt-surface: #1e1e1e; --rdt-text: #e0e0e0; }
+*/
+
+:root {
+  /* Borders */
+  --rdt-border: #c5cae9;
+  --rdt-border-divider: #e0e0e0;
+  --rdt-border-cell: #f0f0f0;
+
+  /* Accent & interactive */
+  --rdt-accent: #3949ab;
+  --rdt-accent-soft: #e8eaf6;
+  --rdt-accent-muted: #5c6bc0;
+  /* Primary blue used for pagination, spinner, links */
+  --rdt-accent-blue: #1976d2;
+  --rdt-accent-blue-soft: #e3f2fd;
+  --rdt-pagination-active-bg: var(--rdt-accent-blue);
+  --rdt-pagination-hover-bg: var(--rdt-accent-blue-soft);
+  --rdt-spinner-track: var(--rdt-accent-blue-soft);
+  --rdt-spinner-thumb: var(--rdt-accent-blue);
+  --rdt-resize-hover: rgba(57, 73, 171, 0.35);
+  --rdt-resize-handle-mid: rgba(25, 118, 210, 0.12);
+  --rdt-resize-handle-end: rgba(25, 118, 210, 0.22);
+  --rdt-resize-handle-inset: rgba(25, 118, 210, 0.12);
+  --rdt-focus-ring: rgba(57, 73, 171, 0.2);
+  --rdt-focus-outline-contrast: #ffffff;
+
+  /* Surfaces */
+  --rdt-surface: #ffffff;
+  --rdt-surface-elevated: #f5f5f5;
+  --rdt-surface-muted: #eeeeee;
+  --rdt-surface-toolbar-start: #ffffff;
+  --rdt-surface-toolbar-end: #f5f5f5;
+  --rdt-surface-hints-start: #fafbff;
+  --rdt-surface-hints-end: #eef0fb;
+  --rdt-surface-header-start: #f5f5f5;
+  --rdt-surface-header-end: #eeeeee;
+  --rdt-surface-summary: #eeeeee;
+  --rdt-surface-row-hover: #f5f5f5;
+
+  /* Text */
+  --rdt-text: #424242;
+  --rdt-text-strong: #263238;
+  --rdt-text-muted: #757575;
+  --rdt-text-label: #546e7a;
+  --rdt-text-hint-drag: #283593;
+  --rdt-text-hint-resize: #1565c0;
+
+  /* Form controls */
+  --rdt-input-border: #b0bec5;
+  --rdt-input-border-hover: #78909c;
+
+  /* Pagination */
+  --rdt-pagination-active-fg: #ffffff;
+  --rdt-pagination-disabled-opacity: 0.45;
+
+  /* Misc */
+  --rdt-hint-icon-opacity: 0.85;
+  --rdt-drag-grip-opacity: 0.85;
+}
+
+/* Table root inherits :root theme; wrap overrides here if you prefer */
+.react-data-table {
+  color: var(--rdt-text);
+}
+
+/* Optional filter + rows-per-page toolbar */
+.react-data-table__filter-bar,
+.react-data-table__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px 24px;
+  padding: 10px 12px;
+  border: 1px solid var(--rdt-border);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(
+    180deg,
+    var(--rdt-surface-toolbar-start) 0%,
+    var(--rdt-surface-toolbar-end) 100%
+  );
+}
+
+.react-data-table__toolbar--pagination-only {
+  justify-content: flex-end;
+}
+
+.react-data-table__filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 140px;
+}
+
+.react-data-table__filter-field--page-size {
+  margin-left: auto;
+  min-width: 0;
+}
+
+.react-data-table__filter-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--rdt-text-label);
+}
+
+.react-data-table__filter-input,
+.react-data-table__filter-select {
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 10px;
+  border: 1px solid var(--rdt-input-border);
+  border-radius: 4px;
+  background: var(--rdt-surface);
+  color: var(--rdt-text-strong);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.react-data-table__filter-input:hover,
+.react-data-table__filter-select:hover {
+  border-color: var(--rdt-input-border-hover);
+}
+
+.react-data-table__filter-input:focus,
+.react-data-table__filter-select:focus {
+  outline: none;
+  border-color: var(--rdt-accent);
+  box-shadow: 0 0 0 2px var(--rdt-focus-ring);
+}
+
+.react-data-table__filter-bar + .react-data-table__hints {
+  border-top: none;
+  border-radius: 0;
+}
+
+.react-data-table__toolbar--pagination-only + .react-data-table__hints {
+  border-top: none;
+  border-radius: 0;
+}
+
+.react-data-table__filter-bar + .react-data-table__scroll,
+.react-data-table__toolbar--pagination-only + .react-data-table__scroll {
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+}
+
+/* Hint strip — makes drag vs resize discoverable */
+.react-data-table__hints {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem 1.25rem;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--rdt-text);
+  border: 1px solid var(--rdt-border);
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  padding: 8px 12px;
+  background: linear-gradient(
+    180deg,
+    var(--rdt-surface-hints-start) 0%,
+    var(--rdt-surface-hints-end) 100%
+  );
+}
+
+.react-data-table__hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.react-data-table__hint--drag {
+  color: var(--rdt-text-hint-drag);
+}
+
+.react-data-table__hint--resize {
+  color: var(--rdt-text-hint-resize);
+}
+
+.react-data-table__hint-icon {
+  flex-shrink: 0;
+  width: 1.1rem;
+  height: 1rem;
+  border-radius: 3px;
+}
+
+/* Grip icon: six dots for “drag column” */
+.react-data-table__hint-icon--grip {
+  background-image: radial-gradient(currentColor 1.2px, transparent 1.3px);
+  background-size: 5px 5px;
+  background-position: 0 0;
+  opacity: var(--rdt-hint-icon-opacity);
+}
+
+/* Arrows ↔ for “resize width” */
+.react-data-table__hint-icon--arrows {
+  background: var(--rdt-accent-soft);
+  border: 1px solid var(--rdt-border);
+  position: relative;
+}
+
+.react-data-table__hint-icon--arrows::before,
+.react-data-table__hint-icon--arrows::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 0;
+  height: 0;
+  margin-top: -3px;
+  border-style: solid;
+}
+
+.react-data-table__hint-icon--arrows::before {
+  left: 2px;
+  border-width: 3px 4px 3px 0;
+  border-color: transparent transparent transparent var(--rdt-accent);
+}
+
+.react-data-table__hint-icon--arrows::after {
+  right: 2px;
+  border-width: 3px 0 3px 4px;
+  border-color: transparent var(--rdt-accent) transparent transparent;
+}
+
+.react-data-table__scroll {
+  overflow-x: auto;
+  border: 1px solid var(--rdt-border);
+  border-radius: 6px;
+}
+
+/* When hints sit above, table area is visually attached */
+.react-data-table__hints + .react-data-table__scroll {
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+}
+
+.react-data-table table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.react-data-table__th {
+  position: relative;
+  text-align: left;
+  padding: 0;
+  vertical-align: middle;
+  border-right: 1px solid var(--rdt-border-divider);
+  background: linear-gradient(
+    180deg,
+    var(--rdt-surface-header-start) 0%,
+    var(--rdt-surface-header-end) 100%
+  );
+  user-select: none;
+}
+
+.react-data-table__th:last-child {
+  border-right: none;
+}
+
+.react-data-table__th--draggable {
+  cursor: grab;
+}
+
+.react-data-table__th--draggable:active {
+  cursor: grabbing;
+}
+
+.react-data-table__th-main {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+  padding: 8px 12px;
+  padding-right: 14px;
+}
+
+/* Drag grip: visible in header, same language as hint */
+.react-data-table__drag-grip {
+  flex-shrink: 0;
+  width: 10px;
+  height: 18px;
+  border-radius: 3px;
+  cursor: grab;
+  background-image: radial-gradient(var(--rdt-accent-muted) 1.2px, transparent 1.3px);
+  background-size: 4px 4px;
+  background-position: 0 0;
+  opacity: var(--rdt-drag-grip-opacity);
+}
+
+.react-data-table__th--draggable:active .react-data-table__drag-grip {
+  cursor: grabbing;
+}
+
+.react-data-table__th-title {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+/* Resize handle — right edge, “drag” affordance */
+.react-data-table__resize-handle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  cursor: col-resize;
+  z-index: 2;
+  border-radius: 0 0 2px 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 35%,
+    var(--rdt-resize-handle-mid) 50%,
+    var(--rdt-resize-handle-end) 100%
+  );
+  box-shadow: inset 1px 0 0 var(--rdt-resize-handle-inset);
+}
+
+.react-data-table__resize-handle:hover,
+.react-data-table__resize-handle:focus-visible {
+  outline: none;
+  background: linear-gradient(90deg, transparent 0%, var(--rdt-resize-hover) 100%);
+  box-shadow: inset 2px 0 0 var(--rdt-accent);
+}
+
+.react-data-table__resize-handle:focus-visible {
+  box-shadow:
+    inset 2px 0 0 var(--rdt-accent),
+    0 0 0 2px var(--rdt-focus-outline-contrast),
+    0 0 0 4px var(--rdt-accent);
+}
+
+body.react-data-table--resizing {
+  cursor: col-resize !important;
+  user-select: none !important;
+}
+
+.react-data-table tbody td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rdt-border-divider);
+  border-right: 1px solid var(--rdt-border-cell);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+}
+
+.react-data-table tbody td:last-child {
+  border-right: none;
+}
+
+.react-data-table__empty {
+  text-align: center;
+  color: var(--rdt-text-muted);
+  padding: 24px !important;
+}
+
+.react-data-table--loading {
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.react-data-table__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--rdt-spinner-track);
+  border-top-color: var(--rdt-spinner-thumb);
+  border-radius: 50%;
+  animation: react-data-table-spin 0.8s linear infinite;
+}
+
+@keyframes react-data-table-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.summary-line {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 40px;
+  background: var(--rdt-surface-summary);
+}
+
+.summary-line .bold {
+  font-weight: bold;
+}
+
+.react-data-table-pagination ul.pagination {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 12px 0 0;
+  padding: 0;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.react-data-table-pagination ul.pagination li {
+  display: inline-block;
+  min-width: 32px;
+  text-align: center;
+}
+
+.react-data-table-pagination ul.pagination li a,
+.react-data-table-pagination ul.pagination span {
+  display: inline-block;
+  padding: 6px 10px;
+  text-decoration: none;
+  color: var(--rdt-text);
+  border-radius: 2px;
+}
+
+.react-data-table-pagination ul.pagination li.active a {
+  background: var(--rdt-pagination-active-bg);
+  color: var(--rdt-pagination-active-fg);
+}
+
+.react-data-table-pagination ul.pagination li.waves-effect a:hover {
+  background: var(--rdt-pagination-hover-bg);
+}
+
+.react-data-table-pagination ul.pagination li.disabled {
+  opacity: var(--rdt-pagination-disabled-opacity);
+  pointer-events: none;
+}
+
+thead.grey.lighten-3 {
+  background-color: var(--rdt-surface-muted);
+}
+
+table.highlight tbody tr:hover {
+  background-color: var(--rdt-surface-row-hover);
+}
