@@ -45,6 +45,10 @@ const MOCK_ROWS = [
     user_name: 'david',
     deposit_number: '4',
     deposit_placement_time: '2026-03-18T10:15:00',
+    deposit_type_id: 4,
+    deposit_amount: 500,
+    deposit_currency_id: 2,
+    deposit_status_id: 1
   },
   {
     id: 5,
@@ -53,6 +57,10 @@ const MOCK_ROWS = [
     user_name: 'eve',
     deposit_number: '5',
     deposit_placement_time: '2026-03-19T14:30:00',
+    deposit_type_id: 4,
+    deposit_amount: 500,
+    deposit_currency_id: 2,
+    deposit_status_id: 1
   },
   {
     id: 6,
@@ -61,6 +69,10 @@ const MOCK_ROWS = [
     user_name: 'frank',
     deposit_number: '6',
     deposit_placement_time: '2026-03-20T16:45:00',
+    deposit_type_id: 4,
+    deposit_amount: 500,
+    deposit_currency_id: 2,
+    deposit_status_id: 1
   },
 ];
 
@@ -161,7 +173,7 @@ export default function App() {
           { field: 'deposit_status_id', label: 'Deposit Status', placeholder: 'e.g. SUCCESS' },
         ]}
         enablePagination
-        defaultPageSize={10}
+        defaultPageSize={5}
         pageSizeOptions={[5, 10]}
         renderSummary={({ filteredCount, totalRows, currentPage, pageSize, totalPages }) => (
           <div className="summary-line grey lighten-3">

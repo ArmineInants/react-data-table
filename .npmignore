@@ -1,0 +1,2 @@
+# Never publish the local Vite demo (package.json "files" already limits to dist/)
+example/

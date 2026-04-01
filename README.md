@@ -1,9 +1,11 @@
 # react-column-drag-resize-table
 
-**Data grid for React admin and internal tools:** draggable column reorder and edge resize, optional text filters, pagination, optional persisted layout, and a simple Materialize-inspired look you can theme with CSS variables.
+A highly customizable React data table component for admin dashboards and internal tools. Features include draggable column reordering, resizable columns, built-in text filtering, pagination, optional persisted layouts, and easy theming via CSS variables. Optimized for usability and simple integration with a modern, Material-inspired design.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![React](https://img.shields.io/badge/React-%3E%3D16.8-61dafb?logo=react&logoColor=white)](https://react.dev/)
+
+![react-column-drag-resize-table demo](https://raw.githubusercontent.com/ArmineInants/react-data-table/main/docs/Recording_table.gif)
 
 ---
 
@@ -120,13 +122,13 @@ export function AdvancedExample() {
 | `className` | no | `string` | `''` | — | Class on the outer wrapper. |
 | `tableClassName` | no | `string` | `'highlight'` | — | Class on the `<table>` (e.g. zebra striping). |
 | `columnOrder` | no | `string[]` | internal order | Array of column `id`s | **Controlled:** current column order. Omit for internal state. |
-| `onColumnOrderChange` | no | `(order: string[]) => void` | — | — | Fires when the user reorders columns (also used with `layoutStorageKey`). |
+| `onColumnOrderChange` | no | `(order: string[]) => void` | — | — | Fires when the user reorders columns. If omitted while `columnOrder` is also omitted, reorder changes are persisted to `localStorage` (see `layoutStorageKey`). |
 | `enableColumnReorder` | no | `boolean` | `true` | `true` / `false` | Allow drag-and-drop column reorder. |
 | `columnWidths` | no | `Record<string, number>` | internal widths | Pixel numbers per column `id` | **Controlled:** column widths. |
-| `onColumnWidthsChange` | no | `(widths: Record<string, number>) => void` | — | — | Fires when the user resizes a column. |
+| `onColumnWidthsChange` | no | `(widths: Record<string, number>) => void` | — | — | Fires when the user resizes a column. If omitted while `columnWidths` is undefined, width changes are persisted to `localStorage` (see `layoutStorageKey`). |
 | `enableColumnResize` | no | `boolean` | `true` | `true` / `false` | Allow drag resize on column edges. |
 | `minColumnWidth` | no | `number` | `64` | ≥ `0` | Minimum width when resizing (px). |
-| `layoutStorageKey` | no | `string` | — | — | If set and column callbacks are omitted, order/width persist under `react-column-drag-resize-table:v1:*` in `localStorage`. |
+| `layoutStorageKey` | no | `string` | — | — | Optional id segment for `localStorage` keys. When omitted, a key is derived from the column `id`s. Order and widths persist under `react-column-drag-resize-table:v1:*` when the matching prop is uncontrolled and its `on*Change` handler is omitted. |
 | `enableFiltering` | no | `boolean` | `false` | `true` / `false` | Show the filter toolbar and apply [filter rules](#filter-value-rules) to `rows`. |
 | `filterFields` | no | `FilterField[]` | `[]` | See [FilterField](#filterfield) | Fields listed here get text inputs; empty string means “no filter” for that key. |
 | `filters` | no | `Record<string, unknown>` | — | — | **Controlled:** current filter object. Pair with `onFiltersChange`. |
@@ -191,27 +193,70 @@ You can drive the same keys from **`filterFields`** (one input per `field`) or f
 
 ## Styling
 
-```js
-import 'react-column-drag-resize-table/styles.css';
+```css
+
+Below are the CSS variables used for DataTable styling.  
+To customize the appearance, place overrides in the `:root` of your stylesheet:
+
+```css
+:root {
+  /* Borders */
+  --rdt-border: #c5cae9;
+  --rdt-border-divider: #e0e0e0;
+  --rdt-border-cell: #f0f0f0;
+
+  /* Accent & interactive */
+  --rdt-accent: #3949ab;
+  --rdt-accent-soft: #e8eaf6;
+  --rdt-accent-muted: #5c6bc0;
+  /* Primary blue used for pagination, spinner, links */
+  --rdt-accent-blue: #1976d2;
+  --rdt-accent-blue-soft: #e3f2fd;
+  --rdt-pagination-active-bg: var(--rdt-accent-blue);
+  --rdt-pagination-hover-bg: var(--rdt-accent-blue-soft);
+  --rdt-spinner-track: var(--rdt-accent-blue-soft);
+  --rdt-spinner-thumb: var(--rdt-accent-blue);
+  --rdt-resize-hover: rgba(57, 73, 171, 0.35);
+  --rdt-resize-handle-mid: rgba(25, 118, 210, 0.12);
+  --rdt-resize-handle-end: rgba(25, 118, 210, 0.22);
+  --rdt-resize-handle-inset: rgba(25, 118, 210, 0.12);
+  --rdt-focus-ring: rgba(57, 73, 171, 0.2);
+  --rdt-focus-outline-contrast: #ffffff;
+
+  /* Surfaces */
+  --rdt-surface: #ffffff;
+  --rdt-surface-elevated: #f5f5f5;
+  --rdt-surface-muted: #eeeeee;
+  --rdt-surface-toolbar-start: #ffffff;
+  --rdt-surface-toolbar-end: #f5f5f5;
+  --rdt-surface-hints-start: #fafbff;
+  --rdt-surface-hints-end: #eef0fb;
+  --rdt-surface-header-start: #f5f5f5;
+  --rdt-surface-header-end: #eeeeee;
+  --rdt-surface-summary: #eeeeee;
+  --rdt-surface-row-hover: #f5f5f5;
+
+  /* Text */
+  --rdt-text: #424242;
+  --rdt-text-strong: #263238;
+  --rdt-text-muted: #757575;
+  --rdt-text-label: #546e7a;
+  --rdt-text-hint-drag: #283593;
+  --rdt-text-hint-resize: #1565c0;
+
+  /* Form controls */
+  --rdt-input-border: #b0bec5;
+  --rdt-input-border-hover: #78909c;
+
+  /* Pagination */
+  --rdt-pagination-active-fg: #ffffff;
+  --rdt-pagination-disabled-opacity: 0.45;
+
+  /* Misc */
+  --rdt-hint-icon-opacity: 0.85;
+  --rdt-drag-grip-opacity: 0.85;
+}
 ```
-
-Theme tokens use the **`--rdt-*`** CSS variables on **`:root`** (see **`src/styles.css`** in this repo). The component root element keeps the class **`react-data-table`** so existing selectors and overrides stay stable.
-
----
-
-## TypeScript
-
-Types are exported from **`react-column-drag-resize-table`**, for example **`DataTableProps`**, **`Column`**, **`FilterField`**, and **`DataTableSummaryContext`**.
-
----
-
-## Other export: `filterRows`
-
-| Export | Type | Description |
-|--------|------|-------------|
-| `filterRows` | `<T>(rows: T[], filters: Record<string, unknown>) => T[]` | Applies the same filter rules as **`DataTable`** to an array of rows (optional if you only use the built-in filtering). |
-
----
 
 ## Development
 
