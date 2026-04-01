@@ -1,7 +1,7 @@
 {
   "name": "react-column-drag-resize-table",
-  "version": "0.1.0",
-  "description": "React data table with draggable column reorder and resize, optional filters and pagination, themeable CSS variables, optional localStorage layout.",
+  "version": "0.1.1",
+  "description": "React data table component: draggable column reorder, resizable columns, text filters, pagination, optional localStorage column layout, CSS variables theming. For admin dashboards and internal tools.",
   "author": "Armine Inants",
   "license": "MIT",
   "type": "module",
@@ -17,25 +17,33 @@
     "./styles.css": "./dist/react-column-drag-resize-table.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "sideEffects": [
     "**/*.css"
   ],
   "keywords": [
     "react",
+    "react-component",
     "table",
     "data-table",
+    "datatable",
     "data-grid",
-    "datagrid",
     "columns",
     "resize",
     "reorder",
     "drag",
+    "draggable",
+    "column-resize",
     "admin",
     "dashboard",
     "pagination",
-    "filter"
+    "filter",
+    "filtering",
+    "ui",
+    "theme",
+    "css-variables"
   ],
   "repository": {
     "type": "git",
@@ -44,7 +52,7 @@
   "bugs": {
     "url": "https://github.com/ArmineInants/react-data-table/issues"
   },
-  "homepage": "https://github.com/ArmineInants/react-data-table#readme",
+  "homepage": "https://react-data-table-topaz.vercel.app/",
   "peerDependencies": {
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0"

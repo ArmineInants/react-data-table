@@ -5,7 +5,9 @@ A highly customizable React data table component for admin dashboards and intern
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![React](https://img.shields.io/badge/React-%3E%3D16.8-61dafb?logo=react&logoColor=white)](https://react.dev/)
 
-![react-column-drag-resize-table demo](https://raw.githubusercontent.com/ArmineInants/react-data-table/main/docs/Recording_table.gif)
+![react-column-drag-resize-table demo](https://raw.githubusercontent.com/ArmineInants/react-data-table/master/docs/Recording_table.gif)
+
+**Live demo:** [react-data-table-topaz.vercel.app](https://react-data-table-topaz.vercel.app/)
 
 ---
 
@@ -16,8 +18,6 @@ npm install react-column-drag-resize-table
 ```
 
 Peers: **React** and **React DOM** ≥ **16.8**.
-
-> If this name is unavailable on npm, publish as a [scoped package](https://docs.npmjs.com/about/scopes) (for example `@your-org/react-column-drag-resize-table`).
 
 ---
 
