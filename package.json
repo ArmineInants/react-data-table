@@ -1,6 +1,6 @@
 {
   "name": "react-column-drag-resize-table",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React data table component: draggable column reorder, resizable columns, text filters, pagination, optional localStorage column layout, CSS variables theming. For admin dashboards and internal tools.",
   "author": "Armine Inants",
   "license": "MIT",
@@ -18,7 +18,8 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "sideEffects": [
     "**/*.css"

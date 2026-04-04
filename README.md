@@ -59,12 +59,15 @@ export function Example() {
 
 ## Advanced example
 
-Filtering, pagination, and a **`renderSummary`** line using the built-in filter bar:
+Filtering, pagination, a **`renderSummary`** line, and **custom cells** with **`render`** (see [Column cells](#column-cells-accessor-and-render)):
 
 ```jsx
 import { useMemo } from 'react';
 import { DataTable } from 'react-column-drag-resize-table';
 import 'react-column-drag-resize-table/styles.css';
+
+const money = (n) =>
+  new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD' }).format(n);
 
 const rows = [
   { id: 1, user_name: 'alice', amount: 100, status: 'ok' },
@@ -76,8 +79,30 @@ export function AdvancedExample() {
     () => [
       { id: 'id', title: 'ID', accessor: 'id' },
       { id: 'user_name', title: 'User', accessor: 'user_name' },
-      { id: 'amount', title: 'Amount', accessor: 'amount' },
-      { id: 'status', title: 'Status', accessor: 'status' }
+      {
+        id: 'amount',
+        title: 'Amount',
+        accessor: 'amount',
+        render: (row) => money(row.amount)
+      },
+      {
+        id: 'status',
+        title: 'Status',
+        accessor: 'status',
+        render: (row) => (
+          <span
+            style={{
+              display: 'inline-block',
+              padding: '2px 8px',
+              borderRadius: 4,
+              fontSize: '0.875rem',
+              background: row.status === 'ok' ? '#e8f5e9' : '#fff3e0'
+            }}
+          >
+            {row.status}
+          </span>
+        )
+      }
     ],
     []
   );
@@ -148,12 +173,18 @@ export function AdvancedExample() {
 
 Used for each entry in **`columns`**.
 
+#### Column cells: `accessor` and `render`
+
+- **Plain value:** use a **string `accessor`** with the row field name (e.g. `accessor: 'user_name'`), or omit `accessor` and rely on **`id`** matching a key on the row (`row[id]`).
+- **Custom content:** use **`render: (row) => …`** for formatting, badges, links, or any JSX. When **`render`** is set, it **replaces** the default cell value for that column (string `accessor` is then only documentary for you; it is not used for display).
+- A **function `accessor`** is still accepted for custom cells, but **`render`** is the preferred API for that so the column definition stays clear: *field key vs cell UI*.
+
 | Property | Required | Type | Default | Possible values / notes | Description |
 |----------|----------|------|---------|-------------------------|-------------|
 | `id` | **yes** | `string` | — | Unique among columns | Stable id (order, resize, filters, storage). |
 | `title` | **yes** | `string` | — | — | Header label. |
-| `accessor` | no | `keyof T \| ((row: T) => ReactNode)` | — | — | Key on the row, or function returning cell content. If omitted, falls back to `row[id]`. |
-| `render` | no | `(row: T) => ReactNode` | — | — | If set, used for the cell instead of `accessor`. |
+| `accessor` | no | `keyof T \| ((row: T) => ReactNode)` | — | — | Row field key for simple columns, or legacy function form; see [above](#column-cells-accessor-and-render). If omitted, cell value defaults to `row[id]`. |
+| `render` | no | `(row: T) => ReactNode` | — | — | Custom cell; if set, used instead of the value from string `accessor` / `row[id]`. |
 
 ### `FilterField`
 
