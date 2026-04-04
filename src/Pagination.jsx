@@ -1,5 +1,5 @@
 /**
- * URL-agnostic pagination: use callbacks. Optional `getPageHref` for link-based navigation (e.g. React Router).
+ * URL-agnostic pagination: use callbacks.
  *
  * @param {object} props
  * @param {number} props.currentPage
@@ -13,7 +13,6 @@ export function Pagination({
   totalPages,
   onPageChange,
   className = '',
-  getPageHref
 }) {
   if (totalPages <= 1) {
     return null;
@@ -31,30 +30,16 @@ export function Pagination({
 
   const PageControl = ({ page, children }) => {
     const active = page === currentPage;
-    if (getPageHref) {
-      return (
-        <li className={active ? 'active' : 'waves-effect'} key={page}>
-          <a href={getPageHref(page)} onClick={(e) => { e.preventDefault(); go(page); }}>
-            {children}
-          </a>
-        </li>
-      );
-    }
+
     return (
-      <li
-        className={active ? 'active' : 'waves-effect'}
-        key={page}
-        onClick={() => go(page)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            go(page);
-          }
-        }}
-        role="button"
-        tabIndex={0}
-      >
-        <a href="#">{children}</a>
+      <li className={active ? 'active' : 'waves-effect'}>
+        <button
+          type="button"
+          onClick={() => go(page)}
+          aria-current={active ? 'page' : undefined}
+        >
+          {children}
+        </button>
       </li>
     );
   };
@@ -64,22 +49,15 @@ export function Pagination({
       <ul className="pagination right">
         {currentPage === 1 ? (
           <li className="disabled">
-            <span className="react-data-table-pagination__nav" aria-hidden>
+            <span className="react-data-table-pagination__nav" aria-hidden="true">
               ‹
             </span>
           </li>
         ) : (
           <li className="waves-effect">
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                go(currentPage - 1);
-              }}
-              aria-label="Previous page"
-            >
+            <button type="button" onClick={() => go(currentPage - 1)} aria-label="Previous page">
               ‹
-            </a>
+            </button>
           </li>
         )}
         {pagesList.map((page) => (
@@ -89,22 +67,15 @@ export function Pagination({
         ))}
         {currentPage === totalPages ? (
           <li className="disabled">
-            <span className="react-data-table-pagination__nav" aria-hidden>
+            <span className="react-data-table-pagination__nav" aria-hidden="true">
               ›
             </span>
           </li>
         ) : (
           <li className="waves-effect">
-            <a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                go(currentPage + 1);
-              }}
-              aria-label="Next page"
-            >
+            <button type="button" onClick={() => go(currentPage + 1)} aria-label="Next page">
               ›
-            </a>
+            </button>
           </li>
         )}
       </ul>

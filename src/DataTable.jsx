@@ -1,4 +1,5 @@
 import { useMemo, useState, useCallback, useEffect, useRef, useId } from 'react';
+import { createPortal } from 'react-dom';
 import { filterRows } from './filterRows.js';
 import { Pagination } from './Pagination.jsx';
 
@@ -251,12 +252,104 @@ export function DataTable({
   );
 
   const resizeSession = useRef(null);
+  const orderedIdsRef = useRef([]);
+  const [columnReorderUI, setColumnReorderUI] = useState(null);
 
   const { columns, orderedIds, setOrder } = useOrderedColumns(
     columnsProp,
     columnOrderProp,
     onColumnOrderChange,
     orderPersistKey
+  );
+
+  orderedIdsRef.current = orderedIds;
+
+  const applyColumnReorderAtPoint = useCallback(
+    (draggedId, clientX, clientY) => {
+      const el = document.elementFromPoint(clientX, clientY);
+      if (!el) return;
+      const th = el.closest?.('th.react-data-table__th');
+      const targetId = th?.id;
+      if (!targetId || !draggedId || targetId === draggedId) return;
+
+      const order = [...orderedIdsRef.current];
+      const draggedIdx = order.indexOf(draggedId);
+      const targetIdx = order.indexOf(targetId);
+      if (draggedIdx < 0 || targetIdx < 0) return;
+
+      const bb = th.getBoundingClientRect();
+      const afterHalf = clientX >= bb.x + parseFloat(bb.width) / 2;
+
+      const next = order.filter((id) => id !== draggedId);
+      let insertAt = next.indexOf(targetId);
+      if (afterHalf) insertAt += 1;
+      next.splice(insertAt, 0, draggedId);
+      setOrder(next);
+    },
+    [setOrder]
+  );
+
+  const handleReorderPointerDown = useCallback(
+    (col, e) => {
+      if (!enableColumnReorder) return;
+      if (!e.isPrimary) return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      if (e.target.closest?.('.react-data-table__resize-handle')) return;
+
+      const th = e.currentTarget;
+      const rect = th.getBoundingClientRect();
+      const offsetX = e.clientX - rect.left;
+      const offsetY = e.clientY - rect.top;
+
+      e.preventDefault();
+      try {
+        th.setPointerCapture(e.pointerId);
+      } catch {
+        /* preview / unsupported */
+      }
+
+      setColumnReorderUI({
+        colId: col.id,
+        title: col.title,
+        width: rect.width,
+        height: rect.height,
+        offsetX,
+        offsetY,
+        pointerX: e.clientX,
+        pointerY: e.clientY
+      });
+
+      const pointerId = e.pointerId;
+
+      const onMove = (ev) => {
+        if (ev.pointerId !== pointerId) return;
+        ev.preventDefault();
+        setColumnReorderUI((prev) =>
+          prev && prev.colId === col.id
+            ? { ...prev, pointerX: ev.clientX, pointerY: ev.clientY }
+            : prev
+        );
+      };
+
+      const onEnd = (ev) => {
+        if (ev.pointerId !== pointerId) return;
+        try {
+          th.releasePointerCapture(pointerId);
+        } catch {
+          /* already released */
+        }
+        th.removeEventListener('pointermove', onMove);
+        th.removeEventListener('pointerup', onEnd);
+        th.removeEventListener('pointercancel', onEnd);
+        setColumnReorderUI(null);
+        applyColumnReorderAtPoint(col.id, ev.clientX, ev.clientY);
+      };
+
+      th.addEventListener('pointermove', onMove, { passive: false });
+      th.addEventListener('pointerup', onEnd);
+      th.addEventListener('pointercancel', onEnd);
+    },
+    [enableColumnReorder, applyColumnReorderAtPoint]
   );
 
   const filteredRows = useMemo(() => {
@@ -336,55 +429,31 @@ export function DataTable({
     [pageSizeControlled, onPageSizeChange, pageControlled, onPageChange]
   );
 
-  const dragStart = useCallback(
-    (event) => {
-      const id = event.currentTarget?.id;
-      if (id && enableColumnReorder) {
-        event.dataTransfer.setData('text', id);
-        event.dataTransfer.effectAllowed = 'move';
-      }
-    },
-    [enableColumnReorder]
-  );
-
-  const drop = useCallback(
-    (event) => {
-      if (!enableColumnReorder) return;
-      const draggedId = event.dataTransfer.getData('text');
-      const th = event.target.closest?.('th');
-      const targetId = th?.id;
-      if (!targetId || !draggedId || targetId === draggedId) return;
-
-      const order = [...orderedIds];
-      const draggedIdx = order.indexOf(draggedId);
-      const targetIdx = order.indexOf(targetId);
-      if (draggedIdx < 0 || targetIdx < 0) return;
-
-      const bb = th.getBoundingClientRect();
-      const afterHalf = event.clientX >= bb.x + parseFloat(bb.width) / 2;
-
-      const next = order.filter((id) => id !== draggedId);
-      let insertAt = next.indexOf(targetId);
-      if (afterHalf) insertAt += 1;
-      next.splice(insertAt, 0, draggedId);
-      setOrder(next);
-      event.dataTransfer.clearData();
-    },
-    [orderedIds, enableColumnReorder, setOrder]
-  );
-
-  const handleResizeMouseDown = useCallback(
+  const handleResizePointerDown = useCallback(
     (colId, event) => {
       if (!enableColumnResize) return;
+      if (!event.isPrimary) return;
       event.preventDefault();
       event.stopPropagation();
-      const th = event.currentTarget.closest('th');
+
+      const el = event.currentTarget;
+      const th = el.closest('th');
       const startW =
         columnWidths[colId] ?? (th ? th.getBoundingClientRect().width : minColumnWidth);
+
       resizeSession.current = { colId, startX: event.clientX, startW };
       document.body.classList.add('react-data-table--resizing');
 
+      const pointerId = event.pointerId;
+      try {
+        el.setPointerCapture(pointerId);
+      } catch {
+        /* preview / unsupported */
+      }
+
       const onMove = (moveEvent) => {
+        if (moveEvent.pointerId !== pointerId) return;
+        moveEvent.preventDefault();
         const s = resizeSession.current;
         if (!s) return;
         const delta = moveEvent.clientX - s.startX;
@@ -392,15 +461,23 @@ export function DataTable({
         setColumnWidth(s.colId, newW);
       };
 
-      const onUp = () => {
+      const onUp = (upEvent) => {
+        if (upEvent.pointerId !== pointerId) return;
+        try {
+          el.releasePointerCapture(pointerId);
+        } catch {
+          /* */
+        }
         resizeSession.current = null;
         document.body.classList.remove('react-data-table--resizing');
-        document.removeEventListener('mousemove', onMove);
-        document.removeEventListener('mouseup', onUp);
+        el.removeEventListener('pointermove', onMove);
+        el.removeEventListener('pointerup', onUp);
+        el.removeEventListener('pointercancel', onUp);
       };
 
-      document.addEventListener('mousemove', onMove);
-      document.addEventListener('mouseup', onUp);
+      el.addEventListener('pointermove', onMove, { passive: false });
+      el.addEventListener('pointerup', onUp);
+      el.addEventListener('pointercancel', onUp);
     },
     [enableColumnResize, columnWidths, minColumnWidth, setColumnWidth]
   );
@@ -445,17 +522,16 @@ export function DataTable({
       <th
         key={col.id}
         id={col.id}
+        scope="col"
         className={[
           'react-data-table__th',
-          enableColumnReorder && 'react-data-table__th--draggable'
+          enableColumnReorder && 'react-data-table__th--draggable',
+          columnReorderUI?.colId === col.id && 'react-data-table__th--reorder-source'
         ]
           .filter(Boolean)
           .join(' ')}
         style={thStyle}
-        draggable={enableColumnReorder ? 'true' : 'false'}
-        onDrop={drop}
-        onDragStart={dragStart}
-        onDragOver={(e) => e.preventDefault()}
+        onPointerDown={enableColumnReorder ? (e) => handleReorderPointerDown(col, e) : undefined}
         title={
           enableColumnReorder && enableColumnResize
             ? 'Drag to reorder · Drag the right edge to resize'
@@ -484,7 +560,7 @@ export function DataTable({
             tabIndex={0}
             aria-label="Resize column"
             title="Drag to resize"
-            onMouseDown={(e) => handleResizeMouseDown(col.id, e)}
+            onPointerDown={(e) => handleResizePointerDown(col.id, e)}
             onKeyDown={(e) => {
               if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
                 e.preventDefault();
@@ -609,13 +685,13 @@ export function DataTable({
           {enableColumnReorder ? (
             <span className="react-data-table__hint react-data-table__hint--drag">
               <span className="react-data-table__hint-icon react-data-table__hint-icon--grip" aria-hidden="true" />
-              Drag column headers to reorder
+              Drag or touch column headers to reorder
             </span>
           ) : null}
           {enableColumnResize ? (
             <span className="react-data-table__hint react-data-table__hint--resize">
               <span className="react-data-table__hint-icon react-data-table__hint-icon--arrows" aria-hidden="true" />
-              Drag the right edge of a header to resize
+              Drag or touch the right edge of a header to resize
             </span>
           ) : null}
         </div>
@@ -637,6 +713,31 @@ export function DataTable({
           className={paginationClassName}
         />
       ) : null}
+      {typeof document !== 'undefined' &&
+        columnReorderUI &&
+        createPortal(
+          <div
+            className="react-data-table__reorder-ghost"
+            style={{
+              position: 'fixed',
+              left: 0,
+              top: 0,
+              width: columnReorderUI.width,
+              minHeight: columnReorderUI.height,
+              pointerEvents: 'none',
+              zIndex: 10000,
+              transform: `translate(${columnReorderUI.pointerX - columnReorderUI.offsetX}px, ${columnReorderUI.pointerY - columnReorderUI.offsetY}px)`,
+              boxSizing: 'border-box'
+            }}
+            aria-hidden="true"
+          >
+            <div className="react-data-table__reorder-ghost-inner">
+              <span className="react-data-table__drag-grip" aria-hidden="true" />
+              <span className="react-data-table__th-title">{columnReorderUI.title}</span>
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

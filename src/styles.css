@@ -267,10 +267,42 @@
 
 .react-data-table__th--draggable {
   cursor: grab;
+  touch-action: none;
 }
 
 .react-data-table__th--draggable:active {
   cursor: grabbing;
+}
+
+.react-data-table__th--reorder-source {
+  opacity: 0.35;
+}
+
+/* Floated header preview while reordering (pointer / touch) */
+.react-data-table__reorder-ghost {
+  will-change: transform;
+}
+
+.react-data-table__reorder-ghost-inner {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+  padding: 8px 12px;
+  padding-right: 14px;
+  box-sizing: border-box;
+  border: 1px solid var(--rdt-border);
+  border-radius: 4px;
+  background: linear-gradient(
+    180deg,
+    var(--rdt-surface-header-start) 0%,
+    var(--rdt-surface-header-end) 100%
+  );
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.18),
+    0 2px 8px rgba(57, 73, 171, 0.2);
+  color: var(--rdt-text-strong);
+  user-select: none;
 }
 
 .react-data-table__th-main {
@@ -317,6 +349,7 @@
   margin: 0;
   padding: 0;
   cursor: col-resize;
+  touch-action: none;
   z-index: 2;
   border-radius: 0 0 2px 0;
   background: linear-gradient(
@@ -346,6 +379,7 @@
 body.react-data-table--resizing {
   cursor: col-resize !important;
   user-select: none !important;
+  touch-action: none !important;
 }
 
 .react-data-table tbody td {
@@ -421,6 +455,7 @@ body.react-data-table--resizing {
 }
 
 .react-data-table-pagination ul.pagination li a,
+.react-data-table-pagination ul.pagination li button,
 .react-data-table-pagination ul.pagination span {
   display: inline-block;
   padding: 6px 10px;
@@ -429,12 +464,24 @@ body.react-data-table--resizing {
   border-radius: 2px;
 }
 
-.react-data-table-pagination ul.pagination li.active a {
+.react-data-table-pagination ul.pagination li button {
+  margin: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  line-height: inherit;
+  cursor: pointer;
+  text-align: center;
+}
+
+.react-data-table-pagination ul.pagination li.active a,
+.react-data-table-pagination ul.pagination li.active button {
   background: var(--rdt-pagination-active-bg);
   color: var(--rdt-pagination-active-fg);
 }
 
-.react-data-table-pagination ul.pagination li.waves-effect a:hover {
+.react-data-table-pagination ul.pagination li.waves-effect a:hover,
+.react-data-table-pagination ul.pagination li.waves-effect button:hover {
   background: var(--rdt-pagination-hover-bg);
 }
 
