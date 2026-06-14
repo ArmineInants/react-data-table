@@ -168,6 +168,8 @@ export function AdvancedExample() {
 | `onPageSizeChange` | no | `(size: number) => void` | — | — | Fires when the user changes page size. |
 | `filterBarClassName` | no | `string` | `''` | — | Extra class on the filter toolbar row. |
 | `paginationClassName` | no | `string` | `''` | — | Extra class on the pagination row. |
+| `ariaLabel` | no | `string` | `'Data table'` | — | Accessible name for the `<table>` (`aria-label`). |
+| `clearFiltersLabel` | no | `string` | `'Clear filters'` | — | Label for the button that resets all active filters. |
 
 ### `Column`
 

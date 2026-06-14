@@ -54,6 +54,10 @@ export interface DataTableProps<T = Record<string, unknown>> {
   onPageSizeChange?: (size: number) => void;
   filterBarClassName?: string;
   paginationClassName?: string;
+  /** Accessible name for the `<table>` element. */
+  ariaLabel?: string;
+  /** Label for the clear-filters button shown when any filter is active. */
+  clearFiltersLabel?: string;
 }
 
 export function DataTable<T = Record<string, unknown>>(

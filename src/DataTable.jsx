@@ -158,6 +158,8 @@ function useOrderedColumns(columnsProp, columnOrderProp, onColumnOrderChange, or
  * @param {string} [props.paginationClassName]
  * @param {(ctx: { totalRows: number, filteredCount: number, currentPage: number, pageSize: number, totalPages: number }) => import('react').ReactNode} [props.renderSummary]
  * @param {string} [props.layoutStorageKey] - optional id segment for localStorage when column order/width callbacks are omitted
+ * @param {string} [props.ariaLabel] - accessible name for the table element
+ * @param {string} [props.clearFiltersLabel] - label for the clear-filters button when filters are active
  */
 export function DataTable({
   columns: columnsProp,
@@ -190,7 +192,9 @@ export function DataTable({
   onPageSizeChange,
   filterBarClassName = '',
   paginationClassName = '',
-  renderSummary
+  renderSummary,
+  ariaLabel = 'Data table',
+  clearFiltersLabel = 'Clear filters'
 }) {
   const uid = useId();
   const filtersControlled = filtersProp !== undefined;
@@ -356,6 +360,30 @@ export function DataTable({
     if (!enableFiltering) return rows;
     return filterRows(rows, effectiveFilters);
   }, [rows, enableFiltering, effectiveFilters]);
+
+  const hasActiveFilters = useMemo(() => {
+    if (!enableFiltering) return false;
+    return Object.values(effectiveFilters).some(
+      (value) => value !== '' && value != null
+    );
+  }, [enableFiltering, effectiveFilters]);
+
+  const clearAllFilters = useCallback(() => {
+    const next = {};
+    if (filtersControlled) onFiltersChange?.(next);
+    else setInternalFilters(next);
+
+    if (enablePagination) {
+      if (pageControlled) onPageChange?.(1);
+      else setInternalPage(1);
+    }
+  }, [
+    filtersControlled,
+    onFiltersChange,
+    enablePagination,
+    pageControlled,
+    onPageChange
+  ]);
 
   const totalRows = rows.length;
   const filteredCount = filteredRows.length;
@@ -634,6 +662,15 @@ export function DataTable({
               </div>
             );
           })}
+          {hasActiveFilters ? (
+            <button
+              type="button"
+              className="react-data-table__filter-clear"
+              onClick={clearAllFilters}
+            >
+              {clearFiltersLabel}
+            </button>
+          ) : null}
           {showPageSize ? (
             <div className="react-data-table__filter-field react-data-table__filter-field--page-size">
               <label className="react-data-table__filter-label" htmlFor={`${uid}-page-size`}>
@@ -697,7 +734,7 @@ export function DataTable({
         </div>
       ) : null}
       <div className="react-data-table__scroll">
-        <table className={tableClassName} style={{ tableLayout: 'fixed' }}>
+        <table className={tableClassName} style={{ tableLayout: 'fixed' }} aria-label={ariaLabel}>
           <thead className="grey lighten-3">
             <tr>{columnsList}</tr>
           </thead>

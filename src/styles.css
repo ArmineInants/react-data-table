@@ -134,6 +134,30 @@
   box-shadow: 0 0 0 2px var(--rdt-focus-ring);
 }
 
+.react-data-table__filter-clear {
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border: 1px solid var(--rdt-accent-muted);
+  border-radius: 4px;
+  background: var(--rdt-accent-soft);
+  color: var(--rdt-accent);
+  cursor: pointer;
+  align-self: flex-end;
+}
+
+.react-data-table__filter-clear:hover {
+  background: var(--rdt-accent-blue-soft);
+  border-color: var(--rdt-accent-blue);
+  color: var(--rdt-accent-blue);
+}
+
+.react-data-table__filter-clear:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--rdt-focus-ring);
+}
+
 .react-data-table__filter-bar + .react-data-table__hints {
   border-top: none;
   border-radius: 0;
